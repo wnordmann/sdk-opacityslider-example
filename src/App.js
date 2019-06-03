@@ -43,7 +43,7 @@ class App extends React.Component {
 				'fill-outline-color': '#0033cc'
 			}
 		});
-
+		//Uncomment below
 		// this.props.addLayer({
 		// 	id: 'bc-parcels-wfs2',
 		// 	source: 'bc-parcels-wfs',
@@ -69,7 +69,7 @@ class App extends React.Component {
 		if (layers.length > 0) {
 			layer = getLayerById(layers, 'bc-parcels-wfs');
 			opacity = layer.paint['fill-opacity'] * 100;
-		} 
+		}
 		return (
 			<div className="App">
 				<SdkMap className="map" />
