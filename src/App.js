@@ -19,33 +19,45 @@ class App extends React.Component {
 
 		this.props.setView(
 			[
-				-80,
-				40
+				-122.835,
+				53.84
 			],
-			3
+			13
 		);
 
-		this.props.addSource('population', {
-			type: 'raster',
-			tileSize: 256,
-			maxzoom: 15,
-			tiles: [
-				'https://demo.geo-solutions.it/geoserver/topp/wms?service=WMS&version=1.1.0&request=GetMap&layers=topp:states&srs=EPSG:4326&format=image%2Fpng'
-			]
+		const wfs_url =
+			'https://openmaps.gov.bc.ca/geo/pub/WHSE_CADASTRE.PMBC_PARCEL_FABRIC_POLY_SVW/wfs?version=1.1.0&REQUEST=GetFeature&SRSNAME=EPSG:3857&typeNames=pub:WHSE_CADASTRE.PMBC_PARCEL_FABRIC_POLY_SVW&OUTPUTFORMAT=JSON&BBOX=53.81735,-122.87679,53.8551,-122.81290,urn:ogc:def:crs:EPSG:4326';
+
+		this.props.addSource('bc-parcels-wfs', {
+			type: 'geojson',
+			data: wfs_url
 		});
+
 		this.props.addLayer({
-			id: 'population',
-			source: 'population',
-			type: 'raster',
+			id: 'bc-parcels-wfs',
+			source: 'bc-parcels-wfs',
+			type: 'fill',
 			paint: {
-				'raster-opacity': 0.3
+				'fill-opacity': 0.4,
+				'fill-color': '#0099ff',
+				'fill-outline-color': '#0033cc'
 			}
 		});
+
+		// this.props.addLayer({
+		// 	id: 'bc-parcels-wfs2',
+		// 	source: 'bc-parcels-wfs',
+		// 	type: 'fill',
+		// 	paint: {
+		// 		'fill-opacity': 0.0
+		// 	}
+		// });
 	}
+
 	updateOpacity(opacity, layer) {
-		this.props.updateLayer('population', {
+		this.props.updateLayer('bc-parcels-wfs', {
 			paint: Object.assign({}, layer.paint, {
-				'raster-opacity': opacity / 100
+				'fill-opacity': opacity / 100
 			})
 		});
 	}
@@ -55,9 +67,9 @@ class App extends React.Component {
 		let opacity = 30;
 		const layers = this.props.map.layers;
 		if (layers.length > 0) {
-			layer = getLayerById(layers, 'population');
-			opacity = layer.paint['raster-opacity'] * 100;
-		}
+			layer = getLayerById(layers, 'bc-parcels-wfs');
+			opacity = layer.paint['fill-opacity'] * 100;
+		} 
 		return (
 			<div className="App">
 				<SdkMap className="map" />
